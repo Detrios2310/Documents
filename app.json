@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Документы",
+    "slug": "documents",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "com.detrios.documents"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Приложению нужен доступ к галерее, чтобы добавлять фото документов.",
+          "cameraPermission": "Приложению нужен доступ к камере, чтобы фотографировать документы.",
+          "microphonePermission": false
+        }
+      ],
+      "expo-local-authentication"
+    ]
+  }
+}

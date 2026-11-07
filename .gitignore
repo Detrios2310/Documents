@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+dist/
+web-build/
+
+# Нативные папки создаются при сборке (expo prebuild)
+android/
+ios/
+
+*.log
+.DS_Store
