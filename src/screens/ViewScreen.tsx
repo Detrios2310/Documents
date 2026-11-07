@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 
-import { categoryLabel } from '../constants';
+import { categoryIcon, categoryLabel } from '../constants';
 import { daysUntil, formatRuDate } from '../dates';
 import { colors } from '../theme';
 import type { DocItem } from '../types';
@@ -81,7 +81,9 @@ export default function ViewScreen({ doc, onBack, onEdit, onDelete }: Props) {
 
       <View style={styles.info}>
         <Text style={styles.title}>{doc.title}</Text>
-        <Text style={styles.meta}>{categoryLabel(doc.category)}</Text>
+        <Text style={styles.meta}>
+          {categoryIcon(doc.category)} {categoryLabel(doc.category)}
+        </Text>
         {doc.expiry ? (
           <Text
             style={[

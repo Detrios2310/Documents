@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 
-import { CATEGORIES, categoryLabel } from '../constants';
+import { CATEGORIES, categoryIcon, categoryLabel } from '../constants';
 import { daysUntil, formatRuDate } from '../dates';
 import { colors } from '../theme';
 import type { DocCategory, DocItem } from '../types';
@@ -69,7 +69,7 @@ export default function ListScreen({ docs, lockEnabled, onOpen, onAdd, onToggleL
           {CATEGORIES.map((c) => (
             <Chip
               key={c.key}
-              label={c.label}
+              label={`${c.icon} ${c.label}`}
               active={category === c.key}
               onPress={() => setCategory(c.key)}
             />
@@ -101,12 +101,12 @@ export default function ListScreen({ docs, lockEnabled, onOpen, onAdd, onToggleL
                 <Image source={{ uri: item.pages[0] }} style={styles.thumb} />
               ) : (
                 <View style={[styles.thumb, styles.thumbEmpty]}>
-                  <Text style={{ fontSize: 24 }}>📄</Text>
+                  <Text style={{ fontSize: 28 }}>{categoryIcon(item.category)}</Text>
                 </View>
               )}
               <View style={{ flex: 1 }}>
                 <Text style={styles.cardTitle} numberOfLines={2}>
-                  {item.title}
+                  {categoryIcon(item.category)} {item.title}
                 </Text>
                 <Text style={styles.cardMeta}>
                   {categoryLabel(item.category)} · страниц: {item.pages.length}

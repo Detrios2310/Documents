@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import { CATEGORIES, CROP_FORMATS } from '../constants';
+import CropScreen from './CropScreen';
 import { formatRuDate, parseRuDate } from '../dates';
 import { deleteImage, newId, persistImage } from '../storage';
 import { colors } from '../theme';
@@ -36,9 +37,20 @@ export default function EditScreen({ doc, onSave, onCancel }: Props) {
   );
   const [format, setFormat] = useState<CropFormat>(CROP_FORMATS[0]);
   const [saving, setSaving] = useState(false);
+  const [cropJob, setCropJob] = useState<{ uri: string; aspect?: [number, number] } | null>(null);
 
   const addUris = (uris: string[]) =>
     setPages((prev) => [...prev, ...uris.map((uri) => ({ uri, isNew: true }))]);
+
+  // Фото из камеры/галереи: с обрезкой открываем свой экран с рамкой, которую можно тянуть
+  const handlePicked = (uris: string[]) => {
+    if (uris.length === 0) return;
+    if (format.crop) {
+      setCropJob({ uri: uris[0], aspect: format.aspect });
+    } else {
+      addUris(uris);
+    }
+  };
 
   const takePhoto = async () => {
     const perm = await ImagePicker.requestCameraPermissionsAsync();
@@ -48,24 +60,20 @@ export default function EditScreen({ doc, onSave, onCancel }: Props) {
     }
     const res = await ImagePicker.launchCameraAsync({
       mediaTypes: ['images'],
-      allowsEditing: format.crop,
-      aspect: format.aspect,
       quality: 0.9,
     });
-    if (!res.canceled) addUris(res.assets.map((a) => a.uri));
+    if (!res.canceled) handlePicked(res.assets.map((a) => a.uri));
   };
 
   const pickFromGallery = async () => {
     // С обрезкой выбирается одно фото за раз; без обрезки можно сразу несколько.
     const res = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
-      allowsEditing: format.crop,
-      aspect: format.aspect,
       allowsMultipleSelection: !format.crop,
       selectionLimit: format.crop ? 1 : 20,
       quality: 0.9,
     });
-    if (!res.canceled) addUris(res.assets.map((a) => a.uri));
+    if (!res.canceled) handlePicked(res.assets.map((a) => a.uri));
   };
 
   const removePage = (index: number) =>
@@ -122,6 +130,20 @@ export default function EditScreen({ doc, onSave, onCancel }: Props) {
     }
   };
 
+  if (cropJob) {
+    return (
+      <CropScreen
+        uri={cropJob.uri}
+        aspect={cropJob.aspect}
+        onCancel={() => setCropJob(null)}
+        onDone={(uri) => {
+          addUris([uri]);
+          setCropJob(null);
+        }}
+      />
+    );
+  }
+
   return (
     <View style={styles.screen}>
       <View style={styles.header}>
@@ -152,7 +174,9 @@ export default function EditScreen({ doc, onSave, onCancel }: Props) {
               onPress={() => setCategory(c.key)}
               style={[styles.chip, category === c.key && styles.chipActive]}
             >
-              <Text style={[styles.chipText, category === c.key && styles.chipTextActive]}>{c.label}</Text>
+              <Text style={[styles.chipText, category === c.key && styles.chipTextActive]}>
+                {c.icon} {c.label}
+              </Text>
             </Pressable>
           ))}
         </View>

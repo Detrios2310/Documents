@@ -1,18 +1,21 @@
 import type { CropFormat, DocCategory } from './types';
 
-export const CATEGORIES: { key: DocCategory; label: string }[] = [
-  { key: 'identity', label: 'Личные' },
-  { key: 'transport', label: 'Авто и права' },
-  { key: 'medical', label: 'Медицина' },
-  { key: 'finance', label: 'Финансы' },
-  { key: 'education', label: 'Образование' },
-  { key: 'property', label: 'Недвижимость' },
-  { key: 'work', label: 'Работа' },
-  { key: 'other', label: 'Другое' },
+export const CATEGORIES: { key: DocCategory; label: string; icon: string }[] = [
+  { key: 'identity', label: 'Личные', icon: '🪪' },
+  { key: 'transport', label: 'Авто и права', icon: '🚗' },
+  { key: 'medical', label: 'Медицина', icon: '🏥' },
+  { key: 'finance', label: 'Финансы', icon: '💳' },
+  { key: 'education', label: 'Образование', icon: '🎓' },
+  { key: 'property', label: 'Недвижимость', icon: '🏠' },
+  { key: 'work', label: 'Работа', icon: '💼' },
+  { key: 'other', label: 'Другое', icon: '📁' },
 ];
 
 export const categoryLabel = (key: DocCategory) =>
   CATEGORIES.find((c) => c.key === key)?.label ?? 'Другое';
+
+export const categoryIcon = (key: DocCategory) =>
+  CATEGORIES.find((c) => c.key === key)?.icon ?? '📁';
 
 /**
  * Форматы обрезки. Рамка обрезки сразу выставляется в нужные пропорции,
