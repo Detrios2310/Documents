@@ -10,6 +10,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { categoryIcon, categoryLabel } from '../constants';
 import { daysUntil, formatRuDate } from '../dates';
@@ -25,6 +26,7 @@ type Props = {
 
 export default function ViewScreen({ doc, onBack, onEdit, onDelete }: Props) {
   const { width } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const [index, setIndex] = useState(0);
   const days = daysUntil(doc.expiry);
 
@@ -99,7 +101,7 @@ export default function ViewScreen({ doc, onBack, onEdit, onDelete }: Props) {
         {doc.note ? <Text style={styles.note}>{doc.note}</Text> : null}
       </View>
 
-      <View style={styles.actions}>
+      <View style={[styles.actions, { paddingBottom: 16 + insets.bottom }]}>
         <Pressable style={styles.btn} onPress={share}>
           <Text style={styles.btnText}>Поделиться</Text>
         </Pressable>

@@ -9,6 +9,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CATEGORIES, categoryIcon, categoryLabel } from '../constants';
 import { daysUntil, formatRuDate } from '../dates';
@@ -32,6 +33,7 @@ function expiryInfo(expiry: string): { text: string; color: string } | null {
 }
 
 export default function ListScreen({ docs, lockEnabled, onOpen, onAdd, onToggleLock }: Props) {
+  const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<DocCategory | 'all'>('all');
 
@@ -80,7 +82,7 @@ export default function ListScreen({ docs, lockEnabled, onOpen, onAdd, onToggleL
       <FlatList
         data={filtered}
         keyExtractor={(d) => d.id}
-        contentContainerStyle={{ padding: 16, paddingBottom: 110 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 110 + insets.bottom }}
         ListEmptyComponent={
           <View style={styles.empty}>
             <Text style={styles.emptyTitle}>
@@ -118,7 +120,7 @@ export default function ListScreen({ docs, lockEnabled, onOpen, onAdd, onToggleL
         }}
       />
 
-      <Pressable style={styles.fab} onPress={onAdd}>
+      <Pressable style={[styles.fab, { bottom: 28 + insets.bottom }]} onPress={onAdd}>
         <Text style={styles.fabText}>+</Text>
       </Pressable>
     </View>

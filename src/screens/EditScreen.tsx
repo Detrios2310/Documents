@@ -3,6 +3,7 @@ import { useState } from 'react';
 import {
   Alert,
   Image,
+  KeyboardAvoidingView,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,6 +11,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CATEGORIES, CROP_FORMATS } from '../constants';
 import CropScreen from './CropScreen';
@@ -36,6 +38,7 @@ export default function EditScreen({ doc, onSave, onCancel }: Props) {
     (doc?.pages ?? []).map((uri) => ({ uri, isNew: false })),
   );
   const [format, setFormat] = useState<CropFormat>(CROP_FORMATS[0]);
+  const insets = useSafeAreaInsets();
   const [saving, setSaving] = useState(false);
   const [cropJob, setCropJob] = useState<{ uri: string; aspect?: [number, number] } | null>(null);
 
@@ -145,7 +148,7 @@ export default function EditScreen({ doc, onSave, onCancel }: Props) {
   }
 
   return (
-    <View style={styles.screen}>
+    <KeyboardAvoidingView style={styles.screen} behavior="padding">
       <View style={styles.header}>
         <Pressable onPress={onCancel} hitSlop={10}>
           <Text style={styles.headerLink}>Отмена</Text>
@@ -156,7 +159,11 @@ export default function EditScreen({ doc, onSave, onCancel }: Props) {
         </Pressable>
       </View>
 
-      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 60 }} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={{ padding: 16, paddingBottom: 60 + insets.bottom }}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+      >
         <Text style={styles.label}>Название</Text>
         <TextInput
           style={styles.input}
@@ -249,7 +256,7 @@ export default function EditScreen({ doc, onSave, onCancel }: Props) {
           placeholderTextColor={colors.muted}
         />
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

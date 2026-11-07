@@ -11,6 +11,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors } from '../theme';
 
@@ -66,6 +67,7 @@ function initialRect(bw: number, bh: number, aspect?: [number, number]): Rect {
 }
 
 export default function CropScreen({ uri, aspect, onDone, onCancel }: Props) {
+  const insets = useSafeAreaInsets();
   // Исходное фото приводим к «правильной» ориентации, чтобы координаты совпали с экраном
   const [img, setImg] = useState<{ uri: string; width: number; height: number } | null>(null);
   const [area, setArea] = useState<{ w: number; h: number } | null>(null);
@@ -196,7 +198,7 @@ export default function CropScreen({ uri, aspect, onDone, onCancel }: Props) {
         )}
       </View>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { paddingBottom: 16 + insets.bottom }]}>
         <Text style={styles.hint}>
           Тяните за углы и за стороны рамки, чтобы изменить размер, внутри рамки двигайте её целиком.
         </Text>

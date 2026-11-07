@@ -2,6 +2,7 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import EditScreen from './src/screens/EditScreen';
 import ListScreen from './src/screens/ListScreen';
@@ -108,6 +109,7 @@ export default function App() {
   const current = screen.name !== 'list' && screen.id ? docs.find((d) => d.id === screen.id) : undefined;
 
   return (
+    <SafeAreaProvider>
     <View style={{ flex: 1 }}>
       <StatusBar style="dark" />
       {screen.name === 'list' && (
@@ -148,6 +150,7 @@ export default function App() {
         />
       )}
     </View>
+    </SafeAreaProvider>
   );
 }
 
